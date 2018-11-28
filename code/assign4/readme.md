@@ -19,3 +19,5 @@
 * `function_approximation.py` contains all the phi, while `estimation.py` implements q function approximation, epsilon greedy and softmax. Sorry for the terrible naming, but I feel this assignment very torturous and have no spare time to correct it...
 * `mountaincar/mountaincar.py` contains the simulation of mountain car 
 
+## Response
+* TA gave full credit, but I am afraid they did not have enough time to check all the results. The RBF implemention and mountain car MDP definitely have some bugs.
