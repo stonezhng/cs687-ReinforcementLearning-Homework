@@ -1,6 +1,7 @@
-from moutaincar.mountaincar import MountainCar
-from moutaincar.mountaincar import MountainCarEpisode
-import moutaincar.mc_estimation as me
+from mountaincar import MountainCar
+from mountaincar import MountainCarEpisode
+import estimation
+import function_approximation as fa
 import assignment_helper as ah
 
 import numpy as np
@@ -27,7 +28,7 @@ def sarsa_mountaincar(lr, baseparams, eps, epoch=100, base='fourier'):
         s = mc.d_zero()
 
         # choose a from s using a policy derived from q (e.g., ε-greedy or softmax);
-        first_q = me.epsilon_greedy(me.qw(w, s, actions, base, baseparams), actions, eps(x))
+        first_q = estimation.epsilon_greedy(fa.qw(w, s, actions, base, baseparams), actions, eps(x))
         # pi_s = pe.epsilon_greedy(pe.qw(w, s, order, actions, base), actions, eps)
         a = np.random.choice(actions, 1, p=first_q)[0]
 
@@ -38,13 +39,13 @@ def sarsa_mountaincar(lr, baseparams, eps, epoch=100, base='fourier'):
             new_s, r = mc.P_and_R(s, a)
 
             # Choose a′ from s′ using a policy derived from q;
-            pi_temp = me.epsilon_greedy(me.qw(w, new_s, actions, base, baseparams), actions, eps(x))
+            pi_temp = estimation.epsilon_greedy(fa.qw(w, new_s, actions, base, baseparams), actions, eps(x))
             new_a = np.random.choice(actions, 1, p=pi_temp)[0]
 
             # w += lr * (r + pe.qw_fourier_ele(w, new_s, new_a, order, actions) -
             # pe.qw_fourier_ele(w, s, a, order, actions)) * pe.dqwdw_fourier(s, a, order, actions)
-            new_q = me.qw_ele(w, new_s, new_a, actions, base, baseparams)[0]
-            q, dqdw = me.qw_ele(w, s, a, actions, base, baseparams)
+            new_q = fa.qw_ele(w, new_s, new_a, actions, base, baseparams)[0]
+            q, dqdw = fa.qw_ele(w, s, a, actions, base, baseparams)
             w += lr * (r + new_q - q) * dqdw
 
             s = new_s
@@ -87,7 +88,7 @@ def qlearning_mountaincar(lr, baseparams, eps, epoch=100, base='fourier'):
 
         while s[0] < mc.right_bound:
             # Choose a′ from s′ using a policy derived from q;
-            pi_temp = me.epsilon_greedy(me.qw(w, s, actions, base, baseparams), actions, eps(x))
+            pi_temp = estimation.epsilon_greedy(fa.qw(w, s, actions, base, baseparams), actions, eps(x))
             a = np.random.choice(actions, 1, p=pi_temp)[0]
 
             # Take action a and observe r and s′;
@@ -95,8 +96,8 @@ def qlearning_mountaincar(lr, baseparams, eps, epoch=100, base='fourier'):
 
             # w += lr * (r + pe.qw_fourier_ele(w, new_s, new_a, order, actions) -
             # pe.qw_fourier_ele(w, s, a, order, actions)) * pe.dqwdw_fourier(s, a, order, actions)
-            new_q = np.max(me.qw(w, new_s, actions, base, baseparams))
-            q, dqdw = me.qw_ele(w, s, a, actions, base, baseparams)
+            new_q = np.max(fa.qw(w, new_s, actions, base, baseparams))
+            q, dqdw = fa.qw_ele(w, s, a, actions, base, baseparams)
             w += lr * (r + new_q - q) * dqdw
 
             s = new_s
@@ -126,10 +127,10 @@ def draw_plot(data, err, epoch=100, filename='testq.png'):
     plt.show()
 
 
-rewards, err = sarsa_mc_trail(1e-2, {'order': 3}, trail=100, eps=lambda x: 0.2 if x < 80 else 0.01)
+rewards, err = sarsa_mc_trail(2e-2, {'order': 5}, trail=100, eps=lambda x: 0.01)
 ah.save_cp_csvdata(rewards, err, 'sarsa_mountaincar.csv')
 draw_plot(rewards, err, filename='testsarsamc.png')
 
-rewards, err = qlearning_mc_trail(1e-2, {'order': 3}, trail=100, eps=lambda x: 0.2)
+rewards, err = qlearning_mc_trail(1e-2, {'order': 5}, trail=100, eps=lambda x: 0.2)
 ah.save_cp_csvdata(rewards, err, 'qlearning_mountaincar.csv')
 draw_plot(rewards, err, filename='testqlearningmc.png')

@@ -94,7 +94,7 @@ class Grid:
 
 
 class GridEpisode:
-    def __init__(self, grid, step_bound=400):
+    def __init__(self, grid, step_bound=1000):
         self.grid = grid
         self.active = 1
         self.step_count = 0
