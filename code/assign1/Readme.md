@@ -1,4 +1,4 @@
-#Readme
+# Readme
 ## HOW TO RUN
 Just open **grid.py** and run it. All three questions will run. If you want to run certain question, you need to commend the remaining part,
 
@@ -44,4 +44,7 @@ Just open **grid.py** and run it. All three questions will run. If you want to r
 
 ### Question 4
 * We set $S_0 = 18$, run the code $100, 000$ times and count the number of times when $S_{11} = 21$. Since $A_t$ only depends on $S_t$, we do not need to simulate the entire process. Because we have to set $S_0 = 18$ and run the process fast, we  have to run the episode step by step using run_next_step_randomly method and break the loop when we find a valid history.
+
+## Response
+* TA gave full credit.
 
