@@ -21,3 +21,4 @@
 
 ## Response
 * TA gave full credit, but I am afraid they did not have enough time to check all the results. The RBF implemention and mountain car MDP definitely have some bugs.
+* One known bug is that the mountain car environment is incorrect: one "-" in the dynamic update equation is wrongly written as "+". Please refer to assignment 5 for a modified version of mountain car environment.
